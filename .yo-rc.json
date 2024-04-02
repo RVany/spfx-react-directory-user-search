@@ -1,0 +1,21 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "16.15.1",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.9.1"
+    },
+    "version": "1.17.4",
+    "libraryName": "spfx-react-directory-user-search",
+    "libraryId": "ce480701-4ef7-4cfe-8b4b-f7cc149786ce",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "spfx-react-directory-user-search",
+    "solutionShortDescription": "spfx-react-directory-user-search description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

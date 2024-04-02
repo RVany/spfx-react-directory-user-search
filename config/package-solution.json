@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "spfx-react-directory-user-search-client-side-solution",
+    "id": "ce480701-4ef7-4cfe-8b4b-f7cc149786ce",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.17.4"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "spfx-react-directory-user-search description"
+      },
+      "longDescription": {
+        "default": "spfx-react-directory-user-search description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "spfx-react-directory-user-search Feature",
+        "description": "The feature that activates elements of the spfx-react-directory-user-search solution.",
+        "id": "d81faaa1-d4f0-4a9c-9ec8-931195741a1b",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/spfx-react-directory-user-search.sppkg"
+  }
+}

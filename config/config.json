@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "spfx-react-directory-user-search-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/spfxReactDirectoryUserSearch/SpfxReactDirectoryUserSearchWebPart.js",
+          "manifest": "./src/webparts/spfxReactDirectoryUserSearch/SpfxReactDirectoryUserSearchWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "SpfxReactDirectoryUserSearchWebPartStrings": "lib/webparts/spfxReactDirectoryUserSearch/loc/{locale}.js"
+  }
+}
