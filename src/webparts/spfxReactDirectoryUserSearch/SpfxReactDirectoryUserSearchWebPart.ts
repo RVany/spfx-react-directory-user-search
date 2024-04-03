@@ -3,7 +3,9 @@ import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
 import {
   IPropertyPaneConfiguration,
-  PropertyPaneTextField
+  PropertyPaneSlider,
+  PropertyPaneTextField,
+  PropertyPaneToggle
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
@@ -13,14 +15,15 @@ import { ISpfxReactDirectoryUserSearchProps } from './components/ISpfxReactDirec
 import SpfxReactDirectoryUserSearchHook from './components/SpfxReactDirectoryUserSearchHook';
 
 export interface ISpfxReactDirectoryUserSearchWebPartProps {
-  description: string;
+  title: string;
+  searchFirstName: boolean;
+  searchProps: string;
+  clearTextSearchProps: string;
+  pageSize: number;
+  justifycontent: boolean;
 }
 
 export default class SpfxReactDirectoryUserSearchWebPart extends BaseClientSideWebPart<ISpfxReactDirectoryUserSearchWebPartProps> {
-
-  private _isDarkTheme: boolean = false;
-  private _environmentMessage: string = '';
-
   public render(): void {
     const element: React.ReactElement<ISpfxReactDirectoryUserSearchProps> =
       React.createElement(SpfxReactDirectoryUserSearchHook, {
@@ -40,64 +43,12 @@ export default class SpfxReactDirectoryUserSearchWebPart extends BaseClientSideW
     ReactDom.render(element, this.domElement);
   }
 
-  protected onInit(): Promise<void> {
-    return this._getEnvironmentMessage().then(message => {
-      this._environmentMessage = message;
-    });
-  }
-
-
-
-  private _getEnvironmentMessage(): Promise<string> {
-    if (!!this.context.sdks.microsoftTeams) { // running in Teams, office.com or Outlook
-      return this.context.sdks.microsoftTeams.teamsJs.app.getContext()
-        .then(context => {
-          let environmentMessage: string = '';
-          switch (context.app.host.name) {
-            case 'Office': // running in Office
-              environmentMessage = this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentOffice : strings.AppOfficeEnvironment;
-              break;
-            case 'Outlook': // running in Outlook
-              environmentMessage = this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentOutlook : strings.AppOutlookEnvironment;
-              break;
-            case 'Teams': // running in Teams
-              environmentMessage = this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentTeams : strings.AppTeamsTabEnvironment;
-              break;
-            default:
-              throw new Error('Unknown host');
-          }
-
-          return environmentMessage;
-        });
-    }
-
-    return Promise.resolve(this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentSharePoint : strings.AppSharePointEnvironment);
-  }
-
-  protected onThemeChanged(currentTheme: IReadonlyTheme | undefined): void {
-    if (!currentTheme) {
-      return;
-    }
-
-    this._isDarkTheme = !!currentTheme.isInverted;
-    const {
-      semanticColors
-    } = currentTheme;
-
-    if (semanticColors) {
-      this.domElement.style.setProperty('--bodyText', semanticColors.bodyText || null);
-      this.domElement.style.setProperty('--link', semanticColors.link || null);
-      this.domElement.style.setProperty('--linkHovered', semanticColors.linkHovered || null);
-    }
-
-  }
-
   protected onDispose(): void {
     ReactDom.unmountComponentAtNode(this.domElement);
   }
 
   protected get dataVersion(): Version {
-    return Version.parse('1.0');
+    return Version.parse("1.0");
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -105,20 +56,52 @@ export default class SpfxReactDirectoryUserSearchWebPart extends BaseClientSideW
       pages: [
         {
           header: {
-            description: strings.PropertyPaneDescription
+            description: strings.PropertyPaneDescription,
           },
           groups: [
             {
               groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('description', {
-                  label: strings.DescriptionFieldLabel
-                })
-              ]
-            }
-          ]
-        }
-      ]
+                PropertyPaneTextField("title", {
+                  label: strings.TitleFieldLabel,
+                }),
+                PropertyPaneToggle("searchFirstName", {
+                  checked: false,
+                  label: "Search on First Name ?",
+                }),
+                PropertyPaneToggle("justifycontent", {
+                  checked: false,
+                  label: "Result Layout",
+                  onText: "SpaceBetween",
+                  offText: "Center",
+                }),
+                PropertyPaneTextField("searchProps", {
+                  label: strings.SearchPropsLabel,
+                  description: strings.SearchPropsDesc,
+                  value: this.properties.searchProps,
+                  multiline: false,
+                  resizable: false,
+                }),
+                PropertyPaneTextField("clearTextSearchProps", {
+                  label: strings.ClearTextSearchPropsLabel,
+                  description: strings.ClearTextSearchPropsDesc,
+                  value: this.properties.clearTextSearchProps,
+                  multiline: false,
+                  resizable: false,
+                }),
+                PropertyPaneSlider("pageSize", {
+                  label: "Results per page",
+                  showValue: true,
+                  max: 20,
+                  min: 2,
+                  step: 2,
+                  value: this.properties.pageSize,
+                }),
+              ],
+            },
+          ],
+        },
+      ],
     };
   }
 }
