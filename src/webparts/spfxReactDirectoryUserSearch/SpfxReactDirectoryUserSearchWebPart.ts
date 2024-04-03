@@ -9,8 +9,8 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
 
 import * as strings from 'SpfxReactDirectoryUserSearchWebPartStrings';
-import SpfxReactDirectoryUserSearch from './components/SpfxReactDirectoryUserSearch';
 import { ISpfxReactDirectoryUserSearchProps } from './components/ISpfxReactDirectoryUserSearchProps';
+import SpfxReactDirectoryUserSearchHook from './components/SpfxReactDirectoryUserSearchHook';
 
 export interface ISpfxReactDirectoryUserSearchWebPartProps {
   description: string;
@@ -22,16 +22,20 @@ export default class SpfxReactDirectoryUserSearchWebPart extends BaseClientSideW
   private _environmentMessage: string = '';
 
   public render(): void {
-    const element: React.ReactElement<ISpfxReactDirectoryUserSearchProps> = React.createElement(
-      SpfxReactDirectoryUserSearch,
-      {
-        description: this.properties.description,
-        isDarkTheme: this._isDarkTheme,
-        environmentMessage: this._environmentMessage,
-        hasTeamsContext: !!this.context.sdks.microsoftTeams,
-        userDisplayName: this.context.pageContext.user.displayName
-      }
-    );
+    const element: React.ReactElement<ISpfxReactDirectoryUserSearchProps> =
+      React.createElement(SpfxReactDirectoryUserSearchHook, {
+        title: this.properties.title,
+        context: this.context,
+        searchFirstName: this.properties.searchFirstName,
+        displayMode: this.displayMode,
+        updateProperty: (value: string) => {
+          this.properties.title = value;
+        },
+        searchProps: this.properties.searchProps,
+        clearTextSearchProps: this.properties.clearTextSearchProps,
+        pageSize: this.properties.pageSize,
+        useSpaceBetween: this.properties.justifycontent,
+      });
 
     ReactDom.render(element, this.domElement);
   }
